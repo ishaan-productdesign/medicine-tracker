@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Eye Medication Plan – Sunil Dave</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;min-height:100vh;padding:0 0 50px}
+header{background:linear-gradient(135deg,#1a1a3e,#0d1b4b);padding:22px 20px 18px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)}
+header h1{font-size:1rem;color:#a0aec0;font-weight:500;letter-spacing:.5px}
+header h2{font-size:1.5rem;font-weight:700;margin-top:3px}
+.live-time{font-size:2.4rem;font-weight:800;margin-top:10px;color:#63b3ed;letter-spacing:-1px}
+.date-line{font-size:.82rem;color:#718096;margin-top:3px}
+
+.tl-wrap{margin:18px 16px 0}
+.tl-wrap h3{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:#718096;margin-bottom:8px;padding-left:2px}
+.tl-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
+.tl-row::-webkit-scrollbar{display:none}
+.tl-dot{flex-shrink:0;background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:7px 10px;text-align:center;font-size:.68rem;color:#718096;min-width:60px}
+.tl-dot.active{background:rgba(99,179,237,.12);border-color:rgba(99,179,237,.4);color:#63b3ed}
+.tl-dot.past{opacity:.38}
+.tl-dot .tt{font-weight:700;font-size:.75rem;margin-bottom:1px}
+
+.course-banner{margin:16px 16px 0;border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.course-banner .icon{font-size:1.9rem;flex-shrink:0}
+.course-banner .info{flex:1}
+.course-banner .label{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;opacity:.7}
+.course-banner .name{font-size:1.2rem;font-weight:700;margin-top:2px}
+.course-banner .time-tag{font-size:.75rem;background:rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;margin-top:5px;display:inline-block}
+
+.prog-wrap{margin:12px 16px 0;background:rgba(255,255,255,.07);border-radius:100px;height:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:100px;transition:width .4s ease}
+.prog-lbl{text-align:right;font-size:.73rem;color:#718096;margin:5px 16px 0}
+
+.checklist{margin:16px 16px 0}
+.checklist h3{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:#718096;margin-bottom:9px;padding-left:2px}
+
+.med-item{background:#1a1a2e;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:13px;margin-bottom:9px;display:flex;align-items:center;gap:11px;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none}
+.med-item.done{opacity:.42;background:#111120}
+.med-item.done .med-name{text-decoration:line-through}
+.chk{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:.85rem;cursor:pointer}
+.med-item.done .chk{background:#48bb78;border-color:#48bb78}
+
+.thumb-wrap{width:48px;height:48px;flex-shrink:0;border-radius:10px;overflow:hidden;background:#0d0d1f;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.thumb-wrap img{width:100%;height:100%;object-fit:cover}
+.thumb-wrap .upload-hint{font-size:.52rem;color:#4a5568;text-align:center;line-height:1.3;padding:2px;pointer-events:none}
+.thumb-wrap .cam-icon{font-size:1.1rem;pointer-events:none}
+.thumb-wrap input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+.med-info{flex:1;min-width:0}
+.med-num{font-size:.68rem;color:#718096;text-transform:uppercase;letter-spacing:.5px}
+.med-name{font-size:.95rem;font-weight:600;margin-top:1px;line-height:1.2}
+.med-sub{font-size:.75rem;color:#a0aec0;margin-top:2px}
+.eye-badge{font-size:.6rem;background:rgba(99,179,237,.15);color:#63b3ed;border:1px solid rgba(99,179,237,.3);border-radius:20px;padding:2px 7px;white-space:nowrap;flex-shrink:0}
+
+.all-done{text-align:center;padding:26px 20px 8px}
+.all-done .emoji{font-size:2.8rem}
+.all-done p{color:#68d391;font-weight:600;margin-top:7px;font-size:1.05rem}
+.all-done small{color:#718096;font-size:.82rem}
+
+.next-course{margin:16px 16px 0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px 16px;font-size:.83rem;color:#a0aec0;text-align:center}
+.next-course strong{color:#fff}
+
+.no-course{text-align:center;padding:38px 20px}
+.no-course .big{font-size:2.8rem;margin-bottom:8px}
+.no-course p{font-size:1rem;color:#a0aec0}
+.no-course small{font-size:.8rem;color:#718096}
+
+.reset-btn{display:block;margin:16px 16px 0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:11px;text-align:center;color:#a0aec0;font-size:.83rem;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.reset-btn:active{background:rgba(255,255,255,.09)}
+
+.pending-uploads{margin:24px 16px 0}
+.pending-uploads h3{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:#718096;margin-bottom:9px;padding-left:2px}
+.pending-item{background:#1a1a2e;border:1px dashed rgba(255,255,255,.12);border-radius:14px;padding:13px;margin-bottom:9px;display:flex;align-items:center;gap:11px}
+
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;color:#4a5568}
+.spinner{width:32px;height:32px;border:3px solid rgba(99,179,237,.2);border-top-color:#63b3ed;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.save-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a3a2a;border:1px solid #48bb78;color:#68d391;border-radius:50px;padding:8px 18px;font-size:.8rem;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.save-toast.show{opacity:1}
+
+/* ── 5-min wait overlay ────────────────────────────── */
+.wait-overlay{display:none;position:fixed;inset:0;background:rgba(5,5,18,.97);z-index:2000;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+.wait-overlay.open{display:flex}
+.wait-icon{font-size:4rem;margin-bottom:18px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.wait-title{font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:8px}
+.wait-subtitle{font-size:.92rem;color:#a0aec0;margin-bottom:28px;line-height:1.5}
+.wait-countdown{font-size:3.6rem;font-weight:800;color:#63b3ed;letter-spacing:-2px;font-variant-numeric:tabular-nums;margin-bottom:6px}
+.wait-countdown-label{font-size:.78rem;color:#4a5568;text-transform:uppercase;letter-spacing:1px;margin-bottom:36px}
+.wait-ring{width:110px;height:110px;margin-bottom:28px;position:relative}
+.wait-ring svg{transform:rotate(-90deg)}
+.wait-ring circle.bg{fill:none;stroke:rgba(99,179,237,.12);stroke-width:8}
+.wait-ring circle.prog{fill:none;stroke:#63b3ed;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.wait-ring .ring-time{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#63b3ed}
+.wait-skip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#718096;border-radius:50px;padding:12px 28px;font-size:.88rem;cursor:pointer;-webkit-tap-highlight-color:transparent;margin-top:4px}
+.wait-skip:active{background:rgba(255,255,255,.1)}
+.wait-prev{font-size:.78rem;color:#4a5568;margin-top:20px}
+.wait-prev span{color:#a0aec0}
+
+/* ── Modal ───────────────────────────────────────────── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:1000;align-items:center;justify-content:center;flex-direction:column;padding:20px}
+.modal-overlay.open{display:flex}
+.modal-img{max-width:100%;max-height:75vh;border-radius:16px;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal-label{color:#fff;font-weight:600;font-size:1rem;margin-top:14px;text-align:center}
+.modal-sub{color:#a0aec0;font-size:.8rem;margin-top:3px}
+.modal-actions{display:flex;gap:10px;margin-top:18px}
+.modal-close{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:50px;padding:10px 28px;font-size:.9rem;cursor:pointer}
+.modal-replace{background:rgba(99,179,237,.15);border:1px solid rgba(99,179,237,.3);color:#63b3ed;border-radius:50px;padding:10px 20px;font-size:.9rem;cursor:pointer;position:relative}
+.modal-replace input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+.c1{background:linear-gradient(135deg,#f6ad55,#ed8936);color:#1a0a00}
+.c2{background:linear-gradient(135deg,#68d391,#38a169);color:#001a0a}
+.c3{background:linear-gradient(135deg,#63b3ed,#3182ce);color:#00091a}
+.c4{background:linear-gradient(135deg,#b794f4,#805ad5);color:#0d0020}
+.c5{background:linear-gradient(135deg,#fc8181,#e53e3e);color:#1a0000}
+.c6{background:linear-gradient(135deg,#76e4f7,#0bc5ea);color:#00121a}
+.pb1{background:linear-gradient(90deg,#f6ad55,#ed8936)}
+.pb2{background:linear-gradient(90deg,#68d391,#38a169)}
+.pb3{background:linear-gradient(90deg,#63b3ed,#3182ce)}
+.pb4{background:linear-gradient(90deg,#b794f4,#805ad5)}
+.pb5{background:linear-gradient(90deg,#fc8181,#e53e3e)}
+.pb6{background:linear-gradient(90deg,#76e4f7,#0bc5ea)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>👁️ Eye Medication Plan</h1>
+  <h2>Sunil Dave</h2>
+  <div class="live-time" id="liveTime">--:--</div>
+  <div class="date-line" id="liveDate"></div>
+</header>
+
+<div id="app"><div class="loading"><div class="spinner"></div><span>Loading...</span></div></div>
+
+<div class="save-toast" id="toast"></div>
+
+<!-- 5-min wait overlay -->
+<div class="wait-overlay" id="waitOverlay">
+  <div class="wait-icon">💧</div>
+  <div class="wait-title">Wait before next drop</div>
+  <div class="wait-subtitle">Allow the previous eye drop to be<br>absorbed before applying the next one.</div>
+  <div class="wait-ring">
+    <svg width="110" height="110" viewBox="0 0 110 110">
+      <circle class="bg" cx="55" cy="55" r="46"/>
+      <circle class="prog" id="ringProg" cx="55" cy="55" r="46" stroke-dasharray="289" stroke-dashoffset="0"/>
+    </svg>
+    <div class="ring-time" id="ringTime">5:00</div>
+  </div>
+  <div class="wait-prev" id="waitPrevMed"></div>
+  <button class="wait-skip" onclick="skipWait()">I understand, mark anyway</button>
+</div>
+
+<!-- Photo modal -->
+<div class="modal-overlay" id="modal">
+  <img class="modal-img" id="modalImg" src="" alt="">
+  <div class="modal-label" id="modalLabel"></div>
+  <div class="modal-sub" id="modalSub"></div>
+  <div class="modal-actions">
+    <button class="modal-close" onclick="closeModal()">✕ &nbsp;Close</button>
+    <div class="modal-replace">📷 Replace
+      <input type="file" accept="image/*" id="modalReplaceInput" onchange="handleReplace(this)">
+    </div>
+  </div>
+</div>
+
+<script>
+const MEDS = {
+  1:  {name:"Pred Forte / Predcor",  sub:"Eye Drop",  eye:"Left Eye"},
+  2:  {name:"Vigamox",               sub:"Eye Drop",  eye:"Left Eye & Right Eye"},
+  3:  {name:"Tropicacyl",            sub:"Eye Drop",  eye:"Left Eye"},
+  4:  {name:"Hylosoft",              sub:"Eye Drops", eye:"Left Eye & Right Eye"},
+  5:  {name:"Genteal Gel / Eyemist", sub:"Gel",       eye:"Left Eye"},
+  11: {name:"Simbrinza / Brinmide-B",sub:"Eye Drop",  eye:"Left Eye"}
+};
+
+const COURSES = [
+  {id:1,label:"Morning",       icon:"🌅",time:"9:00 AM",     meds:[1,2,3,4,5,11],start:8*60, end:10*60},
+  {id:2,label:"Mid-Morning",   icon:"🌤️",time:"11:00 AM",    meds:[1,2,3,4],      start:10*60,end:12*60},
+  {id:3,label:"Afternoon",     icon:"☀️",time:"1:00 PM",     meds:[1,2],          start:12*60,end:14*60},
+  {id:4,label:"Late Afternoon",icon:"🌞",time:"3:00 PM",     meds:[1,2],          start:14*60,end:17*60},
+  {id:5,label:"Evening",       icon:"🌆",time:"6:00 PM",     meds:[1,2,3,4,5],    start:17*60,end:20*60},
+  {id:6,label:"Bedtime",       icon:"🌙",time:"Before 10 PM",meds:[1,2,3,4,5,11], start:20*60,end:23*60}
+];
+
+const WAIT_MS = 5 * 60 * 1000; // 5 minutes
+const CIRC = 2 * Math.PI * 46;  // ring circumference
+
+let medImages = {};
+let checked = {};        // { cN: { medId: true } }
+let lastTickTime = {};   // { cN: timestamp of last tick }
+let modalMedId = null;
+let ready = false;
+
+// pending skip action
+let pendingSkip = null;
+let waitInterval = null;
+
+// ── Today's date key ─────────────────────────────────
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ── IndexedDB Storage ─────────────────────────────────
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('med-tracker-db', 1);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains('kv')) {
+        db.createObjectStore('kv');
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbGet(key) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('kv', 'readonly');
+    const req = tx.objectStore('kv').get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function dbSet(key, value) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('kv', 'readwrite');
+    tx.objectStore('kv').put(value, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+async function loadImages() {
+  for (const id of Object.keys(MEDS)) {
+    try {
+      const val = await dbGet(`med-img:${id}`);
+      if (val) medImages[id] = val;
+    } catch(e) {}
+  }
+}
+
+async function saveImage(medId, dataUrl) {
+  try {
+    await dbSet(`med-img:${medId}`, dataUrl);
+    showToast('📸 Photo saved');
+  } catch(e) { showToast('⚠️ Could not save photo'); }
+}
+
+async function loadChecked() {
+  try {
+    const val = await dbGet(`checks:${todayKey()}`);
+    if (val) checked = JSON.parse(val);
+  } catch(e) {}
+}
+
+async function saveChecked() {
+  try {
+    await dbSet(`checks:${todayKey()}`, JSON.stringify(checked));
+  } catch(e) {}
+}
+
+// ── Toast ─────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── Image upload ──────────────────────────────────────
+function handleImageUpload(medId, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    medImages[medId] = e.target.result;
+    await saveImage(medId, e.target.result);
+    render();
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleReplace(input) {
+  if (modalMedId === null) return;
+  handleImageUpload(modalMedId, input);
+  closeModal();
+}
+
+// ── Photo modal ───────────────────────────────────────
+function openModal(medId) {
+  if (!medImages[medId]) return;
+  modalMedId = medId;
+  const med = MEDS[medId];
+  document.getElementById('modalImg').src = medImages[medId];
+  document.getElementById('modalLabel').textContent = med.name;
+  document.getElementById('modalSub').textContent = med.sub + ' · ' + med.eye;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+  modalMedId = null;
+}
+
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal')) closeModal();
+});
+
+// ── 5-min wait overlay ────────────────────────────────
+function openWaitOverlay(courseId, medId, elapsed) {
+  const remaining = WAIT_MS - elapsed;
+  const prevMedId = getPrevCheckedMed(courseId, medId);
+  const prevName = prevMedId ? MEDS[prevMedId].name : 'previous drop';
+
+  document.getElementById('waitPrevMed').innerHTML =
+    `Last applied: <span>${prevName}</span>`;
+  document.getElementById('waitOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  pendingSkip = { courseId, medId };
+
+  // store callback so skip can complete the tick
+  let timeLeft = remaining;
+
+  function updateRing() {
+    const secs = Math.ceil(timeLeft / 1000);
+    const m = Math.floor(secs / 60), s = secs % 60;
+    document.getElementById('ringTime').textContent =
+      `${m}:${String(s).padStart(2,'0')}`;
+    const pct = timeLeft / WAIT_MS;
+    document.getElementById('ringProg').style.strokeDashoffset =
+      CIRC * (1 - pct);
+  }
+
+  updateRing();
+  clearInterval(waitInterval);
+  waitInterval = setInterval(() => {
+    timeLeft -= 1000;
+    if (timeLeft <= 0) {
+      clearInterval(waitInterval);
+      closeWaitOverlay();
+      doTick(courseId, medId);
+    } else {
+      updateRing();
+    }
+  }, 1000);
+}
+
+function closeWaitOverlay() {
+  document.getElementById('waitOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  clearInterval(waitInterval);
+}
+
+function skipWait() {
+  closeWaitOverlay();
+  if (pendingSkip) {
+    doTick(pendingSkip.courseId, pendingSkip.medId);
+    pendingSkip = null;
+  }
+}
+
+function getPrevCheckedMed(courseId, medId) {
+  const k = `c${courseId}`;
+  const course = COURSES.find(c => c.id === courseId);
+  if (!course) return null;
+  const idx = course.meds.indexOf(medId);
+  for (let i = idx - 1; i >= 0; i--) {
+    if (checked[k] && checked[k][course.meds[i]]) return course.meds[i];
+  }
+  return null;
+}
+
+// ── Tick logic ────────────────────────────────────────
+function toggle(courseId, medId) {
+  const k = `c${courseId}`;
+  if (!checked[k]) checked[k] = {};
+
+  // unticking — always allow
+  if (checked[k][medId]) {
+    doTick(courseId, medId);
+    return;
+  }
+
+  // ticking — check 5-min gap if something was already ticked in this course
+  const lastT = lastTickTime[k];
+  if (lastT) {
+    const elapsed = Date.now() - lastT;
+    if (elapsed < WAIT_MS) {
+      openWaitOverlay(courseId, medId, elapsed);
+      return;
+    }
+  }
+  doTick(courseId, medId);
+}
+
+async function doTick(courseId, medId) {
+  const k = `c${courseId}`;
+  if (!checked[k]) checked[k] = {};
+  checked[k][medId] = !checked[k][medId];
+  if (checked[k][medId]) lastTickTime[k] = Date.now();
+  await saveChecked();
+  render();
+}
+
+function resetCourse(courseId) {
+  checked[`c${courseId}`] = {};
+  delete lastTickTime[`c${courseId}`];
+  saveChecked();
+  render();
+}
+
+// ── Time helpers ──────────────────────────────────────
+function getMins(){const n=new Date();return n.getHours()*60+n.getMinutes();}
+function getCourse(){const m=getMins();return COURSES.find(c=>m>=c.start&&m<c.end)||null;}
+function getNext(){const m=getMins();return COURSES.find(c=>c.start>m)||null;}
+
+// ── Render helpers ────────────────────────────────────
+function medItemHTML(id, courseId, isDone) {
+  const med = MEDS[id], hasImg = !!medImages[id];
+  const thumb = hasImg
+    ? `<div class="thumb-wrap" onclick="openModal(${id})"><img src="${medImages[id]}" alt="${med.name}"></div>`
+    : `<div class="thumb-wrap"><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span class="cam-icon">📷</span><span class="upload-hint">Add photo</span></div><input type="file" accept="image/*" onchange="handleImageUpload(${id},this)"></div>`;
+  return `<div class="med-item ${isDone?'done':''}">
+    <div class="chk" onclick="toggle(${courseId},${id})">${isDone?'✓':''}</div>
+    ${thumb}
+    <div class="med-info">
+      <div class="med-num">Rx #${id}</div>
+      <div class="med-name">${med.name}</div>
+      <div class="med-sub">${med.sub}</div>
+    </div>
+    <div class="eye-badge">👁 ${med.eye}</div>
+  </div>`;
+}
+
+// ── Main render ───────────────────────────────────────
+function render() {
+  if (!ready) return;
+  const course = getCourse(), next = getNext(), m = getMins();
+  let html = '';
+
+  // Timeline
+  html += `<div class="tl-wrap"><h3>Today's Schedule</h3><div class="tl-row">`;
+  COURSES.forEach(c => {
+    const past=m>=c.end, active=m>=c.start&&m<c.end;
+    html += `<div class="tl-dot ${active?'active':''} ${past?'past':''}">
+      <div class="tt">${c.id===6?'10PM':c.time.replace(':00','').replace(' ','')}</div>
+      <div>${c.icon}</div>
+      <div style="font-size:.62rem">${c.meds.length} meds</div>
+    </div>`;
+  });
+  html += `</div></div>`;
+
+  // Missing photos strip
+  const missing = Object.keys(MEDS).map(Number).filter(id => !medImages[id]);
+  if (missing.length) {
+    html += `<div class="pending-uploads"><h3>📷 Add missing photos (${missing.length})</h3>`;
+    missing.forEach(id => {
+      const med = MEDS[id];
+      html += `<div class="pending-item">
+        <div class="thumb-wrap"><div style="display:flex;flex-direction:column;align-items:center;gap:2px"><span class="cam-icon">📷</span><span class="upload-hint">Add photo</span></div><input type="file" accept="image/*" onchange="handleImageUpload(${id},this)"></div>
+        <div class="med-info"><div class="med-num">Rx #${id}</div><div class="med-name">${med.name}</div><div class="med-sub">${med.sub}</div></div>
+        <div class="eye-badge">👁 ${med.eye}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (!course) {
+    html += `<div class="no-course">
+      <div class="big">${next?'⏰':'🌛'}</div>
+      <p>${next?'No active course right now':'All done for today!'}</p>
+      <small>${next?`Next: <strong style="color:#fff">${next.label}</strong> at <strong style="color:#fff">${next.time}</strong>`:'Great job. Rest well.'}</small>
+    </div>`;
+    document.getElementById('app').innerHTML = html;
+    return;
+  }
+
+  const k = `c${course.id}`;
+  if (!checked[k]) checked[k] = {};
+  const done = Object.values(checked[k]).filter(Boolean).length;
+  const total = course.meds.length;
+  const pct = Math.round(done/total*100);
+
+  html += `<div class="course-banner c${course.id}">
+    <div class="icon">${course.icon}</div>
+    <div class="info">
+      <div class="label">Course ${course.id} of 6</div>
+      <div class="name">${course.label} Dose</div>
+      <div class="time-tag">${course.time} · ${total} medications</div>
+    </div>
+  </div>`;
+
+  html += `<div class="prog-wrap"><div class="prog-fill pb${course.id}" style="width:${pct}%"></div></div>
+  <div class="prog-lbl">${done} of ${total} done</div>`;
+
+  if (done === total) {
+    html += `<div class="all-done"><div class="emoji">✅</div>
+      <p>Course ${course.id} complete!</p>
+      <small>${next?`Next: ${next.label} at ${next.time}`:'All done for today!'}</small>
+    </div>`;
+  }
+
+  html += `<div class="checklist"><h3>Tap checkbox to mark · Tap photo to view</h3>`;
+  course.meds.forEach(id => html += medItemHTML(id, course.id, !!checked[k][id]));
+  html += `</div>`;
+
+  if (next) html += `<div class="next-course">Next: <strong>${next.label}</strong> at <strong>${next.time}</strong> · ${next.meds.length} meds</div>`;
+  html += `<div class="reset-btn" onclick="resetCourse(${course.id})">↺ Reset this course</div>`;
+
+  document.getElementById('app').innerHTML = html;
+}
+
+// ── Clock ─────────────────────────────────────────────
+function updateClock() {
+  const n=new Date(), h=n.getHours(), mn=n.getMinutes(), s=n.getSeconds();
+  const ap=h>=12?'PM':'AM', h12=h%12===0?12:h%12;
+  document.getElementById('liveTime').textContent=`${h12}:${String(mn).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ap}`;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('liveDate').textContent=`${days[n.getDay()]}, ${n.getDate()} ${months[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+// ── Boot ──────────────────────────────────────────────
+async function init() {
+  updateClock();
+  await Promise.all([loadImages(), loadChecked()]);
+  ready = true;
+  render();
+  setInterval(updateClock, 1000);
+  setInterval(() => { updateClock(); render(); }, 30000);
+}
+
+init();
+</script>
+</body>
+</html>
